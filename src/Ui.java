@@ -1,8 +1,11 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -62,14 +65,31 @@ public class Ui extends Application {
                 width = Integer.parseInt(widthArea.getText());
             }
         });
+        Label mA = new Label("Macierz A");
+        Label mB = new Label("Macierz B");
+        Label mX = new Label("Macierz X");
         vBox.getChildren().add(calculate);
         vBox.getChildren().add(setSize);
         vBox.getChildren().add(sizeArea);
         vBox.getChildren().add(generate);
         vBox.getChildren().add(widthArea);
-        borderPane.setLeft(aMatrix);
-        borderPane.setCenter(bMatrix);
-        borderPane.setBottom(xMatrix);
+        vBox.setPrefSize(200,500);
+
+        VBox vBox1 = new VBox();
+        vBox1.getChildren().add(mA);
+        vBox1.getChildren().add(aMatrix);
+        borderPane.setLeft(vBox1);
+
+        VBox vBox2 = new VBox();
+        vBox2.getChildren().add(mB);
+        vBox2.getChildren().add(bMatrix);
+        BorderPane.setMargin(vBox2,new Insets(0,0,0,100));
+        borderPane.setCenter(vBox2);
+
+        VBox vBox3 = new VBox();
+        vBox3.getChildren().add(mX);
+        vBox3.getChildren().add(xMatrix);
+        borderPane.setBottom(vBox3);
         borderPane.setRight(vBox);
         Scene scene = new Scene(borderPane);
         primaryStage.setTitle("ZSI");
