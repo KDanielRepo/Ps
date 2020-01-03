@@ -6,7 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -26,8 +26,10 @@ public class Ui extends Application {
     private Float[] b;
     private Float[] x;
     private int width;
-    List<Arc> test = new ArrayList<>();
-
+    List<Nest> first = new ArrayList<>();
+    List<Nest> second = new ArrayList<>();
+    //m - Ab(J), a1 - Ax(i), a2 - Aa(j,i)
+    //pierwsze: Aa(i,i)
     @Override
     public void start(Stage primaryStage) throws Exception {
         pStage = primaryStage;
@@ -38,7 +40,7 @@ public class Ui extends Application {
         scene1.getItem1().setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                TableScene tableScene = new TableScene(scene, test);
+                TableScene tableScene = new TableScene(scene, first,second);
             }
         });
 
@@ -46,6 +48,8 @@ public class Ui extends Application {
         scene1.getCalculate().setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                scene1.getSetSize().fire();
+                scene1.getGenerate().fire();
                 a = new Float[size][size];
                 b = new Float[size];
                 x = new Float[size];
@@ -84,8 +88,8 @@ public class Ui extends Application {
 
     public void createTables(int size, MainScene mainScene) {
         for (int i = 0; i < size; i++) {
-            TextArea area1 = new TextArea();
-            TextArea area2 = new TextArea();
+            TextField area1 = new TextField();
+            TextField area2 = new TextField();
             area1.setText("0");
             area2.setText("0");
             area1.setPrefSize(50, 50);
@@ -94,7 +98,7 @@ public class Ui extends Application {
             mainScene.getbMatrix().add(area1, 0, i);
             mainScene.getxMatrix().add(area2, 0, i);
             for (int j = 0; j < size; j++) {
-                TextArea area = new TextArea();
+                TextField area = new TextField();
                 area.setPrefSize(50, 50);
                 area.setText("0");
                 mainScene.getaMatrix().add(area, i, j);
@@ -103,38 +107,60 @@ public class Ui extends Application {
     }
 
     public void setMatrix(MainScene mainScene) {
-        TextArea aa;
+        TextField aa;
         for (int i = 0; i < size; i++) {
-            aa = (TextArea) mainScene.getbMatrix().getChildren().get(i);
+            aa = (TextField) mainScene.getbMatrix().getChildren().get(i);
             b[i] = Float.parseFloat(aa.getText());
             for (int j = 0; j < size; j++) {
-                aa = (TextArea) mainScene.getaMatrix().getChildren().get(j + (i * size));
+                aa = (TextField) mainScene.getaMatrix().getChildren().get(j + (i * size));
                 a[j][i] = Float.parseFloat(aa.getText());
             }
         }
     }
 
     public void fillXTable(MainScene mainScene) {
-        TextArea area;
+        TextField area;
         for (int i = 0; i < size; i++) {
-            area = (TextArea) mainScene.getxMatrix().getChildren().get(i);
+            area = (TextField) mainScene.getxMatrix().getChildren().get(i);
             area.setText(Float.toString(x[i]));
         }
     }
 
     public void calculate() {
-        int s = 0;
         for (int i = 0; i < size; i++) {
             x[i] = b[i] / a[i][i];
             for (int j = i + 1; j < width; j++) {
-                s++;
                 b[j] = b[j] - a[j][i] * x[i];
-                String a = j + " " + i;
-                String b = i + " " + i;
-                Arc arc = new Arc(s, i, j, a, b, a);
-                test.add(arc);
             }
         }
+        createNests();
+    }//przy gniazdach z dzieleniem wspolrzedne beda zawsze 1,1 2,2 3,3...
+//rozbic na dwa gniazda, przy gniazdach z mnozeniem robic luki, scalanie pozniej i dodawanie lukwo
+
+    public void createNests(){
+        //dzielenie
+        int s = 0;
+        for (int i = 0; i < size; i++) {
+            String a = i+""+i;
+            String b = Integer.toString(i);
+            s++;
+            Nest nest1 = new Nest(s,i,i,b,b,a);
+            first.add(nest1);
+        }
+        //mnozenie
+        s=0;
+        for (int i = 0; i < size; i++) {
+            for (int j = i+1; j < width; j++) {
+                s++;
+                String a = j + "" + i;
+                String b = Integer.toString(i);
+                String c = Integer.toString(j);
+                Nest nest2 = new Nest(s, i, j, c, b, a);
+                second.add(nest2);
+            }
+
+        }
+
     }
 
     public void fillRandom() {

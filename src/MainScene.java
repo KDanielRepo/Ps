@@ -15,8 +15,8 @@ public class MainScene extends BorderPane {
     GridPane aMatrix;
     GridPane bMatrix;
     GridPane xMatrix;
-    TextArea sizeArea;
-    TextArea widthArea;
+    TextField sizeArea;
+    TextField widthArea;
     MenuItem item1;
 
 
@@ -26,9 +26,11 @@ public class MainScene extends BorderPane {
         bMatrix = new GridPane();
         xMatrix = new GridPane();
         VBox vBox = new VBox();
-        sizeArea = new TextArea();
+        sizeArea = new TextField();
+        sizeArea.setText("5");
         sizeArea.setPrefSize(100,100);
-        widthArea = new TextArea();
+        widthArea = new TextField();
+        widthArea.setText("5");
         sizeArea.setPrefSize(100,100);
         calculate = new Button("calculate");
         generate = new Button("generate tables");
@@ -121,19 +123,19 @@ public class MainScene extends BorderPane {
     public void setxMatrix(GridPane xMatrix) {
         this.xMatrix = xMatrix;
     }
-    public TextArea getSizeArea() {
+    public TextField getSizeArea() {
         return sizeArea;
     }
 
-    public void setSizeArea(TextArea sizeArea) {
+    public void setSizeArea(TextField sizeArea) {
         this.sizeArea = sizeArea;
     }
 
-    public TextArea getWidthArea() {
+    public TextField getWidthArea() {
         return widthArea;
     }
 
-    public void setWidthArea(TextArea widthArea) {
+    public void setWidthArea(TextField widthArea) {
         this.widthArea = widthArea;
     }
     public MenuItem getItem1() {
